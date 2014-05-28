@@ -1,0 +1,23 @@
+Benchmarking Distributed Filesystems for Many-Task Computing
+
+* abstract
+
+* introduction
+
+* background and related work
+** testing envelope
+** memfs
+** amfs
+
+* a customizable benchmark for distributed filesystems
+
+* evaluation
+** redoing the benchmarks in the papers
+** comparing the simplicity of use
+
+* conclusions
+
+* examples
+** example test files / commands
+** example plots
+

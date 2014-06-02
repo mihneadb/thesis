@@ -1,8 +1,16 @@
 Benchmarking Distributed Filesystems for Many-Task Computing
 
 * abstract
+** distributed filesystem benchmark
+** many task computing
+** follows testing envelope
+** easy to configure and use
+** scaling built in
 
 * introduction
+** specific needs of Many task computing
+** how MTC filesystems work
+** why benchmarking them is different
 
 * background and related work
 ** testing envelope

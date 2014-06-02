@@ -10,14 +10,20 @@ Benchmarking Distributed Filesystems for Many-Task Computing
 * introduction
 ** specific needs of Many task computing
 ** how MTC filesystems work
-** why benchmarking them is different
-
-* background and related work
-** testing envelope
+** why benchmarking them is different (access patterns) - explicit
 ** memfs
 ** amfs
 
-* a customizable benchmark for distributed filesystems
+* background and related work
+** testing envelope
+** iozone
+** mdtest
+** pony (ask alex)
+
+* a benchmark for mtc filesystems
+** support standard MPI
+** sync
+** cluster agnostic
 
 * evaluation
 ** redoing the benchmarks in the papers

@@ -155,13 +155,7 @@ Dave Barry
 
 \abstract{\addtocontents{toc}{\vspace{1em}} % Add a gap in the Contents, for aesthetics
 
-The Thesis Abstract is written here (and usually kept to just this page). The page is kept centered vertically so can expand into the blank space above the title too\ldots
-
-** distributed filesystem benchmark
-** many task computing
-** follows testing envelope
-** easy to configure and use
-** scaling built in
+The Many-Task Computing (MTC) paradigm is used throughout scientific applications today. One of its technical particularities is the use of shared files that compute nodes use to process results between successive steps of computation. This favors the use of shared, distributed filesystems. Research groups around the world are working on such distributed filesystems in order to increase MTC performance. To do this efficiently, they need a way to measure the performance of their implementations. However, current filesystem benchmarks are targeted toward single-node usage. While this behavior is fine for regular filesystems, the relevant MTC-specific measurements include test cases such as N-to-1 reads, where all nodes part of a computation try to read a file that is stored on a single node. In order to overcome this shortcoming, we have introduced a new distributed benchmark that supports distributed MTC filesystems natively. Our solution takes established benchmarks and runs them on any number of nodes in a coordinated manner, allowing complete control over what happens during the test run, without having the user worry about details like synchronization and results aggregation.
 
 
 }

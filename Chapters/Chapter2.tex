@@ -9,4 +9,9 @@
 ** testing envelope
 ** iozone
 ** mdtest
-** other benchmarks and their shortcomings
+
+There are already a significant number of filesystem benchmarks available\cite{fsbench}. However, none of them is a good fit on its own for benchmarking MTC filesystems. We outline a few sample reasons.
+
+Most filesystem benchmarks target disk-based filesystems. This does not fit MTC filesystems because they use RAM as datastore, for performance reasons. The differences between RAM and disks make regular benchmarks unreliable. For example, memory is random access, while disk drives favor sequential access. The difference in access patterns yields less relevant results overall.
+
+Generally, filesystem benchmarks are local - they run on a single node, just like the filesystem implementations they commonly test. This means that in order to run a benchmark on a distributed filesystem, one has to copy the executable on all nodes, run it simultaneously and then aggregate all the results. This approach is tedious, requiring a lot of extra work that is unrelated to the research problem. Furthermore, this way of running tests is not necessarily correct. For example, if an N-to-1 pattern is tested, the N readers should access the file all at the same time. To obtain this, a global synchronization mehtod, such a barrier, should be used. This synchronization cannot be reached by just using a shell script. This means that different test runs will output different results.

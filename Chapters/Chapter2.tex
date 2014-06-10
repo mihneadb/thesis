@@ -81,4 +81,4 @@ While IOzone is a great tool for benchmarking the throughput of reads and writes
 
 \end{itemize}
 
-On top of these, mdtest is already a distributed benchmark through the use of MPI. This means that we can use mdtest out of the box to benchmark metadata operations on MTC filesystems.
+On top of these, mdtest is already a distributed benchmark through the use of MPI. This means that we can use mdtest out of the box to benchmark metadata operations on MTC filesystems. However, there is still room for improvement, especially in the results aggregation and plotting. The benchmark's results are not presented in a machine-readable format, and that means there is no easy way to feed them into a plotting tool. To overcome this, one can use a parser that transforms mdtest output into structured data, like a JSON file.

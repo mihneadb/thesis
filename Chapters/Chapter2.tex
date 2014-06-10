@@ -33,3 +33,23 @@ Overall, there are already a significant number of filesystem benchmarks availab
 Most filesystem benchmarks target disk-based filesystems. This does not fit MTC filesystems because they use RAM as datastore, for performance reasons. The differences between RAM and disks make regular benchmarks unreliable. For example, memory is random access, while disk drives favor sequential access. The difference in access patterns yields less relevant results overall.
 
 Generally, filesystem benchmarks are local - they run on a single node, just like the filesystem implementations they commonly test. This means that in order to run a benchmark on a distributed filesystem, one has to copy the executable on all nodes, run it simultaneously and then aggregate all the results. This approach is tedious, requiring a lot of extra work that is unrelated to the research problem. Furthermore, this way of running tests is not necessarily correct. For example, if an N-to-1 pattern is tested, the N readers should access the file all at the same time. To obtain this, a global synchronization mehtod, such a barrier, should be used. This synchronization cannot be reached by just using a shell script. This means that different test runs will output different results.
+
+However, we can build upon such existing benchmarks. For our solution, we chose to use \textit{IOzone}\cite{iozone} and \textit{mdtest}\cite{mdtest}.
+
+
+IOzone is a benchmark for measuring I/O performance. It can generate multiple types of file operations, as well as measure their performance. The main operations that are useful for our purposes are:
+
+\begin{itemize}
+\item read
+\item write
+\item re-read
+\item re-write
+\end{itemize}
+
+Other operations like random read and random write are supported as well, but they are not relevant for memory-based filesystems.
+
+A big advantage of IOzone is that it is written in ANSI C, using POSIX APIs. Because of this, IOzone has been ported to run on multiple computer platforms. It also supports large files in its test runs, which helps in simulating MTC-sized data files.
+
+Another useful feature of IOzone that made embedding it into our benchmark easier is the fact that it can output its results in tab-separated columns, making the results easy to parse.
+
+** mdtest

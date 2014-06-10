@@ -6,11 +6,29 @@
 
 \lhead{Chapter 2. \emph{Background and Related Work}} % Change X to a consecutive number; this is for the header on each page - perhaps a shortened title
 
-** testing envelope
-** iozone
-** mdtest
 
-There are already a significant number of filesystem benchmarks available\cite{fsbench}. However, none of them is a good fit on its own for benchmarking MTC filesystems. We outline a few sample reasons.
+As we outlined in the Introduction, distributed MTC filesystems are inherently different when compared to usual filesystems. Thus, they have to be benchmarked differently. The relevant set of metrics that needs to be measured is defined in the MTC Envelope\cite{envelope}. It includes the following:
+
+\begin{itemize}
+
+\item file open operation throughput
+\item file creation operation throughput
+\item 1-to-1 read data throughput
+\item 1-to-1 read data bandwidth
+\item N-to-1 read data throughput
+\item N-to-1 read data bandwidth
+\item write data throughput
+\item write data bandwidth
+
+\end{itemize}
+
+In the above list, we can observe two special access patterns, specific to MTC filesystems: 1-to-1 and N-to-1 reads.
+
+The 1-to-1 access pattern can be described as follows. There is created a number \textit{N} of files. Then, the \textit{M} nodes each read $N / M$ of the files. Thus, every node has to do with its own set of files and there is no concurrent access over any one file.
+
+The N-to-1 access pattern is a bit more involved. There is only one file created, and then all \textit{M} nodes read it, concurrently. This pattern generates contention and is more penalizing on the performance of the filesystem.
+
+Overall, there are already a significant number of filesystem benchmarks available\cite{fsbench}. However, none of them is a good fit on its own for benchmarking MTC filesystems. We outline a few sample reasons.
 
 Most filesystem benchmarks target disk-based filesystems. This does not fit MTC filesystems because they use RAM as datastore, for performance reasons. The differences between RAM and disks make regular benchmarks unreliable. For example, memory is random access, while disk drives favor sequential access. The difference in access patterns yields less relevant results overall.
 

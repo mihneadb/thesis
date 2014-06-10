@@ -52,4 +52,20 @@ A big advantage of IOzone is that it is written in ANSI C, using POSIX APIs. Bec
 
 Another useful feature of IOzone that made embedding it into our benchmark easier is the fact that it can output its results in tab-separated columns, making the results easy to parse.
 
+Below are a subset of the configuration options IOzone supports.
+
+\begin{itemize}
+
+\item cache line size
+\item total cache size
+\item record size
+\item file size
+\item including the \textit{close} operation in the timing
+\item including flush operations (\textit{fsync}, \textit{fflush}) in the timing
+\item performing synchronized writes
+\item give results in operations per second
+\item purging the CPU cache before each operation
+
+\end{itemize}
+
 ** mdtest

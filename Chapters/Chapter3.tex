@@ -8,12 +8,20 @@
 
 In the previous two chapters we have discussed about Many-Task Computing, how it is relevant for today's  computations and why it needs special filesystems. We looked at how those filesystems differ from regular disk-based ones, as well as why they need to be benchmarked differently. We also outlined the shortcomings of current benchmarks and how they can be surpassed. In this chapter, we focus on our approach to building an MTC-specific filesystem benchmark, the architecture behind it and the ways in which it can be used.
 
+\section{Running coordinated commands across multiple nodes}
+
+As we previously explained, in order to correctly benchmark access patterns on distributed filesystems, all nodes have to start running any given operation simultaneously. To solve this, we need to have a way of synchronizing nodes. Fortunately, synchronization is a common problem with multiple solutions in distributed programming frameworks.
+
+To solve this problem, we used OpenMPI\cite{openmpi} barriers. We developed an MPI application that executes any given command on a set of available nodes. To do so, we spawn MPI workers in the default shared MPI communicator, we then synchronize them with the use of a barrier, and then the workers run the given command. By using the barrier, we can be sure that the command is run in a coordinated manner, at the same time.
+
+% TODO - diagram with MPI workers sync by barrier + exec cmd
+
+
+% ---------------
 
 * leverage iozone and mdtest
 * parsers for the two
 * plotting
-
-* how to coordinate any number of nodes for any command
 
 * stdout problem
 

@@ -48,9 +48,15 @@ We decided to use OpenMPI mainly because of its open source and vendor-independe
 
 \section{Aggregating the outputs of multiple nodes}
 
+Having an MPI program that runs any given command across multiple nodes, we need a way to capture the outputs and then aggregate them. This is needed because benchmarks like IOzone and mdtest display the performance statistics on the standard output (stdout). Our distributed program has every slave node capture its own output then send it back to the master node, which in turn aggregates all outputs and formats them accordingly.
+
+% TODO - diagram with slave nodes and master sending back output
+
+To solve this problem, our initial solution was to use the \textit{popen}\cite{popen} system call. This runs a given command and captures its output. Then, that output can be sent over MPI to the master node for aggregation. While this approach worked when testing locally using threads, when we tested across distributed nodes using the network stack for communication, the process failed. We discovered that this is due to the fact that \textit{popen} uses \textit{fork} and pipes, which MPI does not fully support.
+
+Since using \textit{popen} was not possible, we found that we could run commands with \textit{system}\cite{system}. However, \textit{system} does not provide a way to capture output, so we had to overcome this new limitation. We did so by making use of output redirection. This means that when we call an external command, we redirect its output to a temporary file that is local to the node, read the output from there and then delete that file.
 
 % TODO - diagram with local execution, redirect to file, sending data from file
-% TODO - diagram with slave nodes and master sending back output
 
 % --------------
 
@@ -58,6 +64,7 @@ We decided to use OpenMPI mainly because of its open source and vendor-independe
 
 ** python wrapper for the discussed mpi code
 ** machinefiles trick
+** NODENAME
 
 % TODO - diagram with a set of nodes greyed out and others not greyed out 
 

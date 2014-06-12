@@ -28,10 +28,21 @@ Message Passing Interface (MPI) is a standardized communication protocol that is
 
 First, there are implementations available for most of the existing computer architectures existent today\cite{mpi_implementations}. This means that by using standard POSIX and MPI in a program, it can run with no extra porting work on multiple architectures. Since we want our benchmark to be accessible to everybody, portability is a great concern. To achieve this, we made sure to only use standard APIs and to not rely on any implementation-specific behavior in our code.
 
-Second, 
+Second, MPI is built to scale natively. This means that we can write the code for a distributed application once and then run it on any number of nodes without having to change anything. The way this works at the API level is fairly simple - all instances are together in a container (called communicator) and within that container they all have a rank (which is an integer identifier).
 
-** support standard MPI
-** cluster agnostic
+
+Because MPI was implemented for a multitude of different architectures, it is generally supported on computer clusters. We developed our solution on the DAS4\cite{das4} cluster which has support for multiple MPI implementations:
+
+\begin{itemize}
+
+\item OpenMPI
+\item MPICH
+\item MPICH2
+\item Intel MPI
+
+We decided to use OpenMPI mainly because of its open source and vendor-independent nature. However, if OpenMPI is not available for some users of our benchmark, they can use any other implementation without problems, as our code relies only on standard behavior.
+
+\end{itemize}
 
 % ----------
 

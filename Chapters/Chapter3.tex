@@ -22,6 +22,14 @@ To solve this problem, we used OpenMPI\cite{openmpi} barriers. We developed an M
 
 \section{Why OpenMPI}
 
+For our solution, we chose to use the MPI framework and, specifically, the OpenMPI\cite{openmpi} implementation. In this subsection we argument why.
+
+Message Passing Interface (MPI) is a standardized communication protocol that is used to implement parallel computations. It defines an API that supports both collective (broadcast, scatter, gather) and point-to-point (send, receive) operations. Our solution makes use of both types of operations. We use a barrier to synchronize the nodes before running the core of the benchmark, and then we use point-to-point operations to send back the output from individual nodes to the master node, which aggregates the results. From our point of view, using MPI has two big advantages.
+
+First, there are implementations available for most of the existing computer architectures existent today\cite{mpi_implementations}. This means that by using standard POSIX and MPI in a program, it can run with no extra porting work on multiple architectures. Since we want our benchmark to be accessible to everybody, portability is a great concern. To achieve this, we made sure to only use standard APIs and to not rely on any implementation-specific behavior in our code.
+
+Second, 
+
 ** support standard MPI
 ** cluster agnostic
 

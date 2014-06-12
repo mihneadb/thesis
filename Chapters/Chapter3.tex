@@ -14,7 +14,14 @@ As we previously explained, in order to correctly benchmark access patterns on d
 
 To solve this problem, we used OpenMPI\cite{openmpi} barriers. We developed an MPI application that executes any given command on a set of available nodes. To do so, we spawn MPI workers in the default shared MPI communicator, we then synchronize them with the use of a barrier, and then the workers run the given command. By using the barrier, we can be sure that the command is run in a coordinated manner, at the same time.
 
-% TODO - diagram with MPI workers sync by barrier + exec cmd
+
+\begin{figure}[h]
+  \centering
+    \includegraphics[scale=0.5]{Figures/barrier.png}
+    \rule{25em}{0.5pt}
+  \caption[MPI barrier]{Synchronizing processes with a barrier}
+  \label{fig:barrier}
+\end{figure}
 
 
 % ---------------
@@ -50,13 +57,27 @@ We decided to use OpenMPI mainly because of its open source and vendor-independe
 
 Having an MPI program that runs any given command across multiple nodes, we need a way to capture the outputs and then aggregate them. This is needed because benchmarks like IOzone and mdtest display the performance statistics on the standard output (stdout). Our distributed program has every slave node capture its own output then send it back to the master node, which in turn aggregates all outputs and formats them accordingly.
 
-% TODO - diagram with slave nodes and master sending back output
+\begin{figure}[h]
+  \centering
+    \includegraphics[scale=0.5]{Figures/slave_send_output.png}
+    \rule{25em}{0.5pt}
+  \caption[Slave nodes sending output]{Slave nodes sending output to master node}
+  \label{fig:slave_send_output}
+\end{figure}
+
 
 To solve this problem, our initial solution was to use the \textit{popen}\cite{popen} system call. This runs a given command and captures its output. Then, that output can be sent over MPI to the master node for aggregation. While this approach worked when testing locally using threads, when we tested across distributed nodes using the network stack for communication, the process failed. We discovered that this is due to the fact that \textit{popen} uses \textit{fork} and pipes, which MPI does not fully support.
 
 Since using \textit{popen} was not possible, we found that we could run commands with \textit{system}\cite{system}. However, \textit{system} does not provide a way to capture output, so we had to overcome this new limitation. We did so by making use of output redirection. This means that when we call an external command, we redirect its output to a temporary file that is local to the node, read the output from there and then delete that file.
 
-% TODO - diagram with local execution, redirect to file, sending data from file
+\begin{figure}[h]
+  \centering
+    \includegraphics[scale=0.5]{Figures/local_exec.png}
+    \rule{25em}{0.5pt}
+  \caption[Local command execution]{Local execution on the slave node}
+  \label{fig:local_exec}
+\end{figure}
+
 
 % --------------
 
@@ -66,7 +87,13 @@ Since using \textit{popen} was not possible, we found that we could run commands
 ** machinefiles trick
 ** NODENAME
 
-% TODO - diagram with a set of nodes greyed out and others not greyed out 
+\begin{figure}[h]
+  \centering
+    \includegraphics[scale=0.5]{Figures/nodes_grayed.png}
+    \rule{25em}{0.5pt}
+  \caption[Varying the number of nodes]{Varying the number of nodes}
+  \label{fig:nodes_grayed}
+\end{figure}
 
 ** reservation separated for easy supporting different clusters
 * automate the cluster reservation process
@@ -75,7 +102,13 @@ Since using \textit{popen} was not possible, we found that we could run commands
 
 \section{Leveraging existing benchmarks}
 
-% TODO - diagram with box containing other boxes - iozone and mdtest
+\begin{figure}[h]
+  \centering
+    \includegraphics[scale=0.5]{Figures/components.png}
+    \rule{25em}{0.5pt}
+  \caption[Components]{Components}
+  \label{fig:components}
+\end{figure}
 
 \subsection{IOzone}
 
@@ -90,7 +123,14 @@ Since using \textit{popen} was not possible, we found that we could run commands
 
 \subsection{Producing structured results}
 
-% TODO - pipeline diagram - output flow from unstructured to structured, aggregated results
+
+\begin{figure}[h]
+  \centering
+    \includegraphics[scale=0.5]{Figures/output_flow.png}
+    \rule{25em}{0.5pt}
+  \caption[Flow of output through the system]{Flow of output through the system}
+  \label{fig:output_flow}
+\end{figure}
 
 % ---------
 
@@ -111,6 +151,13 @@ Since using \textit{popen} was not possible, we found that we could run commands
 
 \section{Putting it all together}
 
-% TODO - diagram with general architecture
+\begin{figure}[h]
+  \centering
+    \includegraphics[scale=0.5]{Figures/architecture.png}
+    \rule{25em}{0.5pt}
+  \caption[General architecture]{General architecture}
+  \label{fig:architecture}
+\end{figure}
+
 
 % ------------

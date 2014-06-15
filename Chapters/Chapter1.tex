@@ -14,13 +14,19 @@ Any computing task that is comprised of multiple small parallel jobs is a good f
 
 MTC exhibits a specific set of technical particularities which need to be properly supported in order to obtain good performance. The high number of parallel tasks that need to be executed underlines the importance of a streamlined scheduling system. Besides that, the way the tasks use files to communicate makes the overall performance largely dependant on the underlying filesystem performance. For the purpose of our subject, we will focus on the filesystem aspect.
 
-% TODO <diagram with tasks using files storing data and then new tasks using that data>
+Figure~\ref{fig:montage} shows an example workflow of Montage\cite{montage}, a software toolkit for astronomical image mosaicking. It shows the outline of a MTC workload, as well as the specific access patterns that emerge, such as data partitioning and aggregation.
+
+\begin{figure}[H]
+  \centering
+    \includegraphics[scale=0.35]{Figures/montage.jpg}
+    \rule{25em}{0.5pt}
+  \caption[Montage workflow]{Montage workflow}
+  \label{fig:montage}
+\end{figure}
 
 Typically, MTC jobs are run on clusters of compute nodes. These compute nodes need to share data files between them in order to complete the tasks that are assigned to them. Usually, files are locally stored on disk drives (either mechanical disk drives or solid state drives), and get sent over the network when a different node needs access. However, even with the fastest drives commercially available today, the transfer rates of disk drives are inferior to the bandwidth of InfiniBand connections that are used in clusters, considering the fact that a SATA link tops out at 3 GBps while InfiniBand 12X supports a 30 GBps data link. This shows that the bottleneck is not the network, but the storage technology. To overcome this bottleneck, RAM can be used as a storage medium. Obviously it cannot achieve the same storage capacity as regular disk drives, but that is not a problem for the purposes of MTC, as the data files used are not so large in size.
 
 In order to make use of the high speed RAM and network connections that compute nodes in today's clusters have, research groups have started work on developing distributed, in-memory filesystems. These filesystems are specifically designed to support MTC workloads and yield better results than common network filesystems like NFS.
-
-% TODO <diagram showing that amfs/memfs is better than nfs>
 
 To illustrate how such filesystems work, we will describe two implementations - AMFS\cite{amfs} and MemFS\cite{memfs}.
 

@@ -132,11 +132,40 @@ Having already discussed about IOzone and mdtest in Chapter~\ref{Chapter2}, this
 
 \subsection{IOzone}
 
+IOzone's main use is for measuring performance on reads and writes. Our project uses it for the read and write throughput measuring that is specified by the MTC Envelope.
+
+For the 1-to-1 test cases, we let IOzone create the test files. However, for the N-to-1 test cases, we create a file using \textit{dd} before running IOzone, and then (for N-to-1 reads) we have all IOzone processes test the read/re-read performance on that particular file.
+
+Out of the variety of parameters IOzone supports, we only used the following:
+
+\begin{itemize}
+
+\item cache size
+\item cache line size
+\item record size
+\item mode operation (read)
+\item create/do not create files
+\item test file size
+
+\end{itemize}
 
 
 % --------
 
 \subsection{mdtest}
+
+While we use IOzone for data-intensive operations (like reads and writes), our solution uses mdtest for metadata measurements, like file creation and stat. Because mdtest already supports running on multiple nodes via MPI, we did not have to use our own MPI coordination layer. The only additions were for parsing and plotting, which will be discussed later on.
+
+Out of the variety of parameters mdtest supports, we only used the following:
+
+\begin{itemize}
+
+\item number of iterations
+\item number of directories and file per process
+\item shared file access
+
+\end{itemize}
+
 
 % --------
 

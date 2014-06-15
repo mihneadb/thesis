@@ -107,6 +107,18 @@ In order to properly support multiple nodes in tests, there also needs to be a w
 
 \section{Leveraging existing benchmarks}
 
+As discussed in Chapter~\ref{Chapter2}, our solution builds on top of existing benchmarks, adding only what is lacking in order to provide a complete MTC filesystem benchmark. Thus, we can decompose it into 5 distinct components:
+
+\begin{itemize}
+
+\item IOzone (3rd party benchmark)
+\item mdtest (3rd party benchmark)
+\item the MPI coordination program
+\item a set of parsers for IOzone and mdtest ouputs
+\item a set of plotters for IOzone and mdtest results
+
+\end{itemize}
+
 \begin{figure}[H]
   \centering
     \includegraphics[scale=0.5]{Figures/components.png}
@@ -115,7 +127,12 @@ In order to properly support multiple nodes in tests, there also needs to be a w
   \label{fig:components}
 \end{figure}
 
+Having already discussed about IOzone and mdtest in Chapter~\ref{Chapter2}, this section explains how our solution makes use of them, as well as how it processes their results, from unstructured blobs of output to structured data, and then to plots.
+
+
 \subsection{IOzone}
+
+
 
 % --------
 

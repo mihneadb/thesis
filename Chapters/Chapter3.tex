@@ -194,6 +194,12 @@ The current implementation contains two parsers - one for IOzone and one for mdt
 
 \subsection{Plotting the results}
 
+Having the test results in structured form, one can process them in multiple ways. One of the more common and visual ways that are used to process benchmark results is plotting. Making plots is useful because they are easier to reason about than plain, raw data, and differences in performance can be spotted immediately.
+
+The plotting logic is decoupled from the main benchmarking code, and it resides in its own Python script. This way, one can make changes to the plotting code in order to obtain different graphics without having to tackle the benchmarking code. Furthermore, the plots can be generated on a different (maybe personal) computer, without having to use the non-graphical SSH connection.
+
+The current implementation contains plotting code both for IOzone and mdtest. It generates a bar plot for each of the metric that is benchmarked, with the results being a function of the number of nodes. We will show a set of plots in Chapter~\ref{Chapter4}.
+
 
 % --------
 

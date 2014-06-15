@@ -208,15 +208,26 @@ The current implementation contains plotting code both for IOzone and mdtest. It
 
 \section{Specifying complex test cases}
 
+Most metrics from the MTC Envelope can be benchmarked with just one IOzone or mdtest command. For example, to measure 1-to-1 read performance, one can run:
+
+\begin{lstlisting}
+./dfs_bench.py './iozone -f /var/scratch/mdr222/${NODENAME}_test -S 12000 -L 64 -c -e -s 1M -i0 -i1 -r 128 -R'
+\end{lstlisting}
+
+However, simulating an N-to-1 access pattern requires two commands - one to create the file that every node will read, and one to actually run the benchmark. More complicated test cases might require even more steps. Thus, a proper benchmarking tool should have support for specifying complex test cases like this:
 
 \begin{enumerate}
 
-\item Create a test file of size 100MB
-\item Move it to the mounted shared directory
-\item Run IOzone
-\item Remove created test files
+\item Create a test file of size 100MB (single node)
+\item Move it to the mounted shared directory (single node)
+\item Run IOzone (all nodes, yields results)
+\item Remove created test files (single node)
 
 \end{enumerate}
+
+This raises multiple challenges. First, there should be a way to run some commands only on one node (and it should deterministically be the same for all steps). Then, by running multiple commands, it becomes ambiguous which of the commands' output should be captured and processed.
+
+Our project comes with a solution for this problem. It supports using a JSON file that describes a test case. The file contains an array of commands, and every command can have attributes describing if it should be run on a single or all nodes, as well as if its output should be processed or not. We will exemplify such a test file in Chapter~\ref{Chapter4}.
 
 % --------------
 

@@ -15,7 +15,7 @@ As we previously explained, in order to correctly benchmark access patterns on d
 To solve this problem, we used OpenMPI\cite{openmpi} barriers. We developed an MPI application that executes any given command on a set of available nodes. To do so, we spawn MPI workers in the default shared MPI communicator, we then synchronize them with the use of a barrier, and then the workers run the given command. By using the barrier, we can be sure that the command is run in a coordinated manner, at the same time.
 
 
-\begin{figure}[h]
+\begin{figure}[H]
   \centering
     \includegraphics[scale=0.5]{Figures/barrier.png}
     \rule{25em}{0.5pt}
@@ -57,7 +57,7 @@ We decided to use OpenMPI mainly because of its open source and vendor-independe
 
 Having an MPI program that runs any given command across multiple nodes, we need a way to capture the outputs and then aggregate them. This is needed because benchmarks like IOzone and mdtest display the performance statistics on the standard output (stdout). Our distributed program has every slave node capture its own output then send it back to the master node, which in turn aggregates all outputs and formats them accordingly.
 
-\begin{figure}[h]
+\begin{figure}[H]
   \centering
     \includegraphics[scale=0.5]{Figures/slave_send_output.png}
     \rule{25em}{0.5pt}
@@ -70,7 +70,7 @@ To solve this problem, our initial solution was to use the \textit{popen}\cite{p
 
 Since using \textit{popen} was not possible, we found that we could run commands with \textit{system}\cite{system}. However, \textit{system} does not provide a way to capture output, so we had to overcome this new limitation. We did so by making use of output redirection. This means that when we call an external command, we redirect its output to a temporary file that is local to the node, read the output from there and then delete that file.
 
-\begin{figure}[h]
+\begin{figure}[H]
   \centering
     \includegraphics[scale=0.5]{Figures/local_exec.png}
     \rule{25em}{0.5pt}
@@ -102,7 +102,7 @@ Since using \textit{popen} was not possible, we found that we could run commands
 
 \section{Leveraging existing benchmarks}
 
-\begin{figure}[h]
+\begin{figure}[H]
   \centering
     \includegraphics[scale=0.5]{Figures/components.png}
     \rule{25em}{0.5pt}
@@ -124,7 +124,7 @@ Since using \textit{popen} was not possible, we found that we could run commands
 \subsection{Producing structured results}
 
 
-\begin{figure}[h]
+\begin{figure}[H]
   \centering
     \includegraphics[scale=0.5]{Figures/output_flow.png}
     \rule{25em}{0.5pt}
@@ -151,7 +151,7 @@ Since using \textit{popen} was not possible, we found that we could run commands
 
 \section{Putting it all together}
 
-\begin{figure}[h]
+\begin{figure}[H]
   \centering
     \includegraphics[scale=0.5]{Figures/architecture.png}
     \rule{25em}{0.5pt}

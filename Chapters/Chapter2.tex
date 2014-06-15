@@ -28,6 +28,8 @@ The 1-to-1 access pattern can be described as follows. There is created a number
 
 The N-to-1 access pattern is a bit more involved. There is only one file created, and then all \textit{M} nodes read it, concurrently. This pattern generates contention and is more penalizing on the performance of the filesystem.
 
+\section{Why current benchmarks are not enough}
+
 Overall, there are already a significant number of filesystem benchmarks available\cite{fsbench}. However, none of them is a good fit on its own for benchmarking MTC filesystems. We outline a few sample reasons.
 
 Most filesystem benchmarks target disk-based filesystems. This does not fit MTC filesystems because they use RAM as datastore, for performance reasons. The differences between RAM and disks make regular benchmarks unreliable. For example, memory is random access, while disk drives favor sequential access. The difference in access patterns yields less relevant results overall.
@@ -36,6 +38,7 @@ Generally, filesystem benchmarks are local - they run on a single node, just lik
 
 However, we can build upon such existing benchmarks. For our solution, we chose to use \textit{IOzone}\cite{iozone} and \textit{mdtest}\cite{mdtest}.
 
+\section{IOzone}
 
 IOzone is a benchmark for measuring I/O performance. It can generate multiple types of file operations, as well as measure their performance. The main operations that are useful for our purposes are:
 
@@ -67,6 +70,9 @@ Below are a subset of the configuration options IOzone supports.
 \item purging the CPU cache before each operation
 
 \end{itemize}
+
+
+\section{mdtest}
 
 While IOzone is a great tool for benchmarking the throughput of reads and writes, we turned to mdtest for benchmarking metadata operations. \textit{mdtest}\cite{mdtest} is a filesystem metadata benchmark that works as follows - first, it creates a file structure (directories and trees) and then it measures performance of operations like \textit{open}, \textit{stat} and \textit{close} on that file structure.
 

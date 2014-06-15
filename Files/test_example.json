@@ -1,0 +1,14 @@
+{
+    "commands": [
+        {
+            "type": "single",
+            "command": "touch /var/scratch/mdr222/test_single_cmd${NODENAME}"
+        },
+        {
+            "type": "all",
+            "command": "./iozone -f /var/scratch/mdr222/${NODENAME}_test -S 12000 -L 64 -c -e -s 1M -i0 -i1 -r 128 -R",
+            "parse": true
+        }
+    ]
+}
+

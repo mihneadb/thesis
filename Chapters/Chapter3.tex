@@ -234,6 +234,8 @@ Our project comes with a solution for this problem. It supports using a JSON fil
 
 \section{Putting it all together}
 
+Now that we have examined the main components of our project, it is a good moment to look at them in ensemble.
+
 \begin{figure}[H]
   \centering
     \includegraphics[scale=0.5]{Figures/architecture.png}
@@ -242,5 +244,23 @@ Our project comes with a solution for this problem. It supports using a JSON fil
   \label{fig:architecture}
 \end{figure}
 
+At the core, there is an MPI program (called \texttt{run\_mpi}) that runs a given command across multiple nodes and then outputs to \textit{stdout} all the nodes' individual outputs. On top of that, there is a Python wrapper (called \texttt{dfs\_bench.py}) that runs the whole benchmark. It uses two extra components - the node reservation script (\texttt{reserve.sh}) and the output parsers. Having all the components together, it runs the following steps in a loop, by the number of nodes in a test:
+
+\begin{enumerate}
+
+\item run the command(s)
+\begin{enumerate}
+\item if using a JSON file to specify, run each command
+\item if it is a "single node" command, run it on the first node
+\item otherwise, run it on all nodes through run\_mpi
+\end{enumerate}
+
+\item get the output
+\item parse the output
+\item store the output in the results set, under the "node\_count" index
+
+\end{enumerate}
+
+After these steps, the results set is stored in JSON format in a file. That file can then be passed to the \textit{make\_bar\_plots.py} file in order to create the corresponding plots.
 
 % ------------

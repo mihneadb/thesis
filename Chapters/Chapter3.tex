@@ -170,9 +170,11 @@ Out of the variety of parameters mdtest supports, we only used the following:
 % --------
 
 
-
-
 \subsection{Producing structured results}
+
+By default, both IOzone and mdtest produce unstructured, human-readable output. In order to compare performance across different numbers of nodes and plot the numbers automatically, there needs to be a conversion of the output to machine readable (or structured) format.
+
+With the way our distributed benchmark is set up, every node produces its own output and then sends it back to the master node. Thus, it is natural for the conversion of the output to happen on the master node as well.
 
 
 \begin{figure}[H]
@@ -182,6 +184,11 @@ Out of the variety of parameters mdtest supports, we only used the following:
   \caption[Flow of output through the system]{Flow of output through the system}
   \label{fig:output_flow}
 \end{figure}
+
+
+As such, the master node runs a parser (which one depends on what benchmark was run - IOzone or mdtest) to process the test results for every individual node. It then aggregates them, so it produces numbers such as the total throughput of the filesystem. After that, it groups the results by number of nodes in the test run. Finally, the master node saves the processed results in a JSON file.
+
+The current implementation contains two parsers - one for IOzone and one for mdtest. Our project can be extended by adding a new benchmark to it. Doing this will only require implementing a new parser, along with the code for plotting the graphs (more about this in the next section).
 
 % ---------
 

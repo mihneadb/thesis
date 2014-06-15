@@ -8,7 +8,7 @@
 
 In the previous two chapters we have discussed about Many-Task Computing, how it is relevant for today's  computations and why it needs special filesystems. We looked at how those filesystems differ from regular disk-based ones, as well as why they need to be benchmarked differently. We also outlined the shortcomings of current benchmarks and how they can be surpassed. In this chapter, we focus on our approach to building an MTC-specific filesystem benchmark, the architecture behind it and the ways in which it can be used.
 
-\section{Running coordinated commands across multiple nodes}
+\section{Running coordinated commands across multiple nodes}\label{sec:coordination}
 
 As we previously explained, in order to correctly benchmark access patterns on distributed filesystems, all nodes have to start running any given operation simultaneously. To solve this, we need to have a way of synchronizing nodes. Fortunately, synchronization is a common problem with multiple solutions in distributed programming frameworks.
 
@@ -83,11 +83,11 @@ Since using \textit{popen} was not possible, we found that we could run commands
 
 \section{Varying the number of nodes}
 
-** python wrapper for the discussed mpi code
-** machinefiles trick
-** NODENAME
+An important aspect of distributed software of any kind is scalability - what is the relation between performance and number of nodes? Naturally, this is relevant for MTC filesystems as well. To measure this, we need to run the same benchmark on different numbers of nodes and then compare the results.
 
-\begin{figure}[h]
+Since this is a given in MTC filesystem benchmarking, our solution handles this by default. The user can configure on what series of node numbers they want the test to run, and the benchmark will measure scalability automatically. To achieve this, we re-run the benchmark with more and more of the available nodes and keep track of the results.
+
+\begin{figure}[H]
   \centering
     \includegraphics[scale=0.5]{Figures/nodes_grayed.png}
     \rule{25em}{0.5pt}
@@ -95,8 +95,13 @@ Since using \textit{popen} was not possible, we found that we could run commands
   \label{fig:nodes_grayed}
 \end{figure}
 
-** reservation separated for easy supporting different clusters
-* automate the cluster reservation process
+The implementation consists of a Python wrapper over the MPI code mentioned in Section~\ref{sec:coordination}. It iterates over an array of integers representing node counts and runs the benchmark with the given amount of nodes. Because it uses the MPI code, it needs to tell MPI exactly what nodes to use. This is done using a machinefile - a text file that contains node IPs, one per line. The MPI program always uses the same machinefile, and the Python wrapper updates it between runs as necessary, increasing the number of nodes.
+
+Because clusters usually have a reservation process that a user has to go through before having access to a set of nodes, we added support for that to our solution as well. For this, we provide a \textit{reserve.sh} script that takes a number of nodes as argument and reserves that many nodes on the cluster. It also checks if the user already has reserved nodes and if so, it reuses those. The Python wrapper uses this script to reserve the maximum amount of nodes needed at the beginning of the run, and then uses them increasingly as the tests advance. So, if the user specified the array \textit{[1, 2, 4, 8, 16]} for the amounts of test nodes, the benchmark would reserve 16 nodes from the start and then run the tests with 1, 2, 4 (and so on) nodes.
+
+The reason for which we kept the node reservation process in a separate script is that other clusters might require different commands to reserve nodes. We want our solution to be accessible to as many users as possible, and running on a different cluster shouldn't imply changing the benchmark's code. This way, the only necessary change is to adapt the \textit{reserve.sh} script.
+
+In order to properly support multiple nodes in tests, there also needs to be a way to parametrize the given commands by nodes. For example, maybe the user wants node 3 to run IOzone against \texttt{test\_file\_3}. To achieve this, our tool sets an environment variable to the ID of every node, such that examining \texttt{\$\{NODENAME\}} on node 3 will yield \texttt{3}.
 
 % ----------
 

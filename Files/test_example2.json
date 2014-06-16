@@ -1,0 +1,14 @@
+{
+    "commands": [
+        {
+            "type": "single",
+            "command": "dd if=/dev/zero of=/local/aua400/kvstore/fisier_tst bs=1M count=256"
+        },
+        {
+            "type": "all",
+            "command": "./iozone -+E -f /local/aua400/kvstore/fisier_tst -S 12000 -L 64 -c -e -s 256M -i1 -r 128 -R",
+            "parse": true
+        }
+    ]
+}
+

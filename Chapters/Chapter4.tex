@@ -65,4 +65,7 @@ Based on a processed set of results, the \textit{make\_bar\_plots.py} script cre
   \label{fig:architecture}
 \end{figure}
 
-we can see .. just one command , scaling taken care of, coordination, aggregation, plots
+The current way of benchmarking an MTC filesystem is to write a number of scripts, then use SSH to distribute them across the nodes. Finally, after the scripts are in place, there needs to be another
+script that iterates through all the nodes and triggers the benchmarks as close to simultaneously as possible over SSH. This requires a considerate amount of work and there is no true coordination in place, as there is no synchronization method (like the barrier in our solution) to enforce the same start time for the benchmark across all nodes. If at some later time a new test case has to be run, all scripts have to be modified to account for the change.
+
+In contrast, using our project to run the same set of benchmarks, there is only one command to execute, as we have shown. Furthermore, coordination is built-in, thanks to the MPI runner, so we can be certain that all nodes start at the same time. If at some later time a new test case has to be run, it is only a matter of specifying it using our JSON format and the benchmark will keep working. Aside from just running the tests, our solution also includes processing the outputs into machine-readable form, as well as plotting the results.

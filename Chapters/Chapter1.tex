@@ -32,17 +32,48 @@ To illustrate how such filesystems work, we will describe two implementations - 
 
 \section{MemFS}
 
+MemFS\cite{memfs} is a distributed, in-memory filesystem for MTC applications. Its motivating idea is that data locality is hard to preserve in MTC applications, and so a filesystem that is locality-agnostic could take advantage of the low-latency, high-bandwidth network connections that we have today and provide good performance for MTC applications. It has three main design goals:
 
+\begin{enumerate}
+
+\item maximize read and write throughput/bandwidth trying to achieve line-speed
+\item achieve close-to-linear I/O operations scalability when increasing the number of compute nodes
+\item reduce latency by storing data in memory and by improving the metadata protocol
+
+\end{enumerate}
+
+\begin{figure}[H]
+  \centering
+    \includegraphics[scale=0.5]{Figures/memfs.png}
+    \rule{25em}{0.5pt}
+  \caption[MemFS design]{MemFS design}
+  \label{fig:memfs}
+\end{figure}
+
+Its three main components are Memcached\cite{memcached}, a distributed cache system that is used in the industry, libmemcached\cite{libmemcached}, a client for interfacing with the Memcached server(s) and a FUSE\cite{fuse} filesystem that exposes the data storage mechanism to the MTC applications that run on top of MemFS.
 
 % --------------
 
 \section{AMFS}
 
+AMFS\cite{amfs} is another distributed filesystem for MTC applications. In contrast to MemFS, it also includes an execution engine. This execution engine exposes a shell programming environment which application developers have to use to access distributed programming features, such as distributing the files in a folder across multiple nodes.
+
+\begin{figure}[H]
+  \centering
+    \includegraphics[scale=0.35]{Figures/amfs.png}
+    \rule{25em}{0.5pt}
+  \caption[AMFS design]{AMFS design}
+  \label{fig:amfs}
+\end{figure}
+
+Another particularity of AMFS is that it tries to exploit data-locality. Its execution engine will try to run tasks on the nodes that already have the needed files, and only if this is not possible will it copy the needed files over to another node.
+
+AMFS also stores file information in memory, but it decouples the medatada from the actual file blobs. Thus, it contains a metadata engine that keeps track of file properties and where the actual binary data is stored within the nodes.
 
 % --------------
 
-% TODO - discuss the two filesystems
 
+\section{Benchmarking MTC filesystems}
 
 Besides the different storage medium (RAM), MTC-specific filesystems also target different access patterns. First, there is the usual 1-to-1 read pattern, where a node needs access to one file. In MTC workloads, it is probable that the file will reside on a different node's local storage. Second, there is the more complicated N-to-1 read pattern, where multiple nodes need to access the exact same file that is stored on a single node's local storage. In order for the MTC workload to achieve maximum performance, the underlying filesystem should make the most out of the network bandwidth, without creating bottlenecks because of contention.
 

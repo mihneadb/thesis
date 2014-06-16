@@ -49,7 +49,7 @@ IOzone is a benchmark for measuring I/O performance. It can generate multiple ty
 \item re-write
 \end{itemize}
 
-Other operations like random read and random write are supported as well, but they are not relevant for memory-based filesystems.
+Other operations such as random read and random write are supported as well, but they are not relevant for memory-based filesystems.
 
 A big advantage of IOzone is that it is written in ANSI C, using POSIX APIs. Because of this, IOzone has been ported to run on multiple computer platforms. It also supports large files in its test runs, which helps in simulating MTC-sized data files.
 
@@ -74,7 +74,7 @@ Below are a subset of the configuration options IOzone supports.
 
 \section{mdtest}
 
-While IOzone is a great tool for benchmarking the throughput of reads and writes, we turned to mdtest for benchmarking metadata operations. \textit{mdtest}\cite{mdtest} is a filesystem metadata benchmark that works as follows - first, it creates a file structure (directories and trees) and then it measures performance of operations like \textit{open}, \textit{stat} and \textit{close} on that file structure.
+While IOzone is a great tool for benchmarking the throughput of reads and writes, we turned to mdtest for benchmarking metadata operations. \textit{mdtest}\cite{mdtest} is a filesystem metadata benchmark that works as follows - first, it creates a file structure (directories and trees) and then it measures performance of operations such as \textit{open}, \textit{stat} and \textit{close} on that file structure.
 
 \textit{mdtest} is highly configurable, supporting options like:
 

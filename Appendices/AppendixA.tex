@@ -6,4 +6,18 @@
 
 \lhead{Appendix A. \emph{Example Test Files and Commands}} % This is for the header on each page - perhaps a shortened title
 
-Write your Appendix content here.
+\lstinputlisting[caption=Test file for 1 to 1 read]{Files/test_example.json}
+
+\lstinputlisting[caption=Test file for N to 1 read]{Files/test_example2.json}
+
+\begin{lstlisting}[caption=Running benchmark from a file]
+./dfs_bench.py --file test_example.json
+\end{lstlisting}
+
+\begin{lstlisting}[caption=Running 1 to 1 read benchmark directly]
+./dfs_bench.py './iozone -f /var/scratch/mdr222/${NODENAME}_test -S 12000 -L 64 -c -e -s 1M -i0 -i1 -r 128 -R'
+\end{lstlisting}
+
+\begin{lstlisting}[caption=Running mdtest]
+./run_mdtest.py 'mdtest -C -i 10 -n 100 -S -d /local/aua400/kvstore'
+\end{lstlisting}

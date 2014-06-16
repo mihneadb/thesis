@@ -1,15 +1,23 @@
 % Chapter Template
 
-\chapter{Conclusions} % Main chapter title
+\chapter{Conclusions and Future Work} % Main chapter title
 
 \label{Chapter5} % Change X to a consecutive number; for referencing this chapter elsewhere, use \ref{ChapterX}
 
 \lhead{Chapter 5. \emph{Conclusions}} % Change X to a consecutive number; this is for the header on each page - perhaps a shortened title
 
-* MTC is relevant today
-• MTC requires specific filesystems
-• current benchmarks are not a good fit
-• our solution
-• targets and supports MTC filesystems
-• follows the metrics of the MTC Envelope
-• is easy to use
+We have seen how today's scientific computations fit the Many-Task Computing paradigm. Researchers in various fields, from astronomy to neuroscience, are using MTC applications to do their work more efficiently. Providing better support for MTC, we enable those researchers to work with better performing tools, and that translates to more accomplishments in research.
+
+To achieve this, we need to look at the core of MTC. There are two main subsystems that it relies on. One is the task scheduler, the other is the filesystem used to share task results. By improving them, we can improve MTC performance no matter what field it is used in.
+
+Our project targets the filesystem layer. While there are numerous ongoing projects to implement MTC specific filesystems, such as MemFS\cite{memfs} and AMFS\cite{amfs}, there is no benchmarking tool tailored to the specific needs of these filesystems.
+
+To properly support an MTC filesystem, a benchmark should support running on multiple nodes at the same time. These nodes should be synchronized such that all operations can be run at the same time. It should also scale easily - testing a filesystem on 16 nodes should not be different than testing a filesystem on 256 nodes. Furthermore, the benchmark should provide a tight feedback loop to the user, allowing them to easily observe the differences in performance between successive runs. This means that the user should not have to worry about aggregating the results and plotting them. All these features, and possibly others, should be built in to the MTC filesystem benchmark.
+
+We have shown that our solution fits all the above mentioned requirements. The test commands are executed through MPI, which handles coordination and scaling in a standard, documented way. Our Python-based test runner handles processing the output as well as plotting it. Besides, it also supports specifying complex test cases. By writing a list of steps to be executed in a file, the user can outline the behavior of the nodes during a benchmark, having control both on the collective level, as well as on the individual level.
+
+By using IOzone and mdtest, our project measures all the performance metrics described in the MTC Envelope\cite{envelope}. We use IOzone to measure data-intensive operations like \textit{read}, while mdtest is used to measure file metadata operations such as \textit{stat} and \textit{create}.
+
+Although our project has all the mentioned features, it is built with the goal of making people working on MTC filesystems more efficient. That means that it should not get in the way and that it should be easy to run. To achieve this, we have made it so that it only needs one command to run a given benchmark, and then just one command to generate the corresponding plots. This saves a considerable amount of time, compared to the current state of the art in distributed filesystem benchmarking, which involves writing one-off scripts, copying them to the nodes over SSH and then finding a way to run them simultaneously. This is not even including the aggregation and plotting parts.
+
+We consider that our solution is ready to be used by MTC filesystem developers, and that it should start improving their productivity right away. However, there is always room for improvement. As such, we see two directions for future work. One is adding support for benchmarking other metrics. Maybe a research group has developed their own metric that is relevant for MTC filesystems and it is not included in the MTC Envelope. We designed our project to be modular, so including other benchmarks is definitely an options. The other direction involves setting up a continuous integration workflow, where one can have a benchmark server that runs a set of benchmarks every day, and keeps historic records of the performance evolution. This data could be presented in an interactive set of plots online, accessible to all members of a team. This way, using the details from the version control system and the data from the benchmarks, research groups could compare the impact of different design decisions on the filesystem's performance, leading to better implementations.
